@@ -1,101 +1,104 @@
-import Image from "next/image";
+'use client';
 
-export default function Home() {
+import React, { useEffect, useState } from 'react';
+import { Inter, Unbounded } from 'next/font/google';
+import Image from 'next/image';
+import Link from 'next/link';
+import { motion } from 'framer-motion'; // Import Framer Motion
+
+const inter = Inter({ subsets: ['latin'] });
+const unbounded = Unbounded({ subsets: ['latin'] });
+
+const videoLinks = ['https://moksha2025.b-cdn.net/7b2f0a8c9e3d1b5a4f6c8e2d0b7a9c3f1e4d8b5a2c6f9e3d1b5a4f6c8e2d0b7.mp4','https://moksha2025.b-cdn.net/e9c7a01e4ac489c13f44573d38fa1265983c8f3fb4c538f289fdc6612c2e9519.mp4','https://moksha2025.b-cdn.net/f1d8e4b5a2c6f9e3d1b5a4f6c8e2d0b7a9c3f1e4d8b5a2c6f9e3d1b5a4f6c8e.mp4'];
+
+const CommingSoon = () => {
+  const [videoSrc, setVideoSrc] = useState<string | undefined>(undefined);
+
+  useEffect(() => {
+    // Select a random video from the array
+    const randomVideo = videoLinks[Math.floor(Math.random() * videoLinks.length)];
+    setVideoSrc(randomVideo);
+  }, []);
+
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+    <div className="relative w-full min-h-screen h-full bg-black">
+      {/* Video Background */}
+      <video autoPlay loop muted className="absolute top-0 left-0 w-full h-full object-cover" src={videoSrc} />
+      {/* Tint Overlay */}
+      <div className="absolute top-0 left-0 w-full h-full bg-black opacity-60 z-10" />
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+      <div className="absolute flex-1 h-full w-full flex flex-col z-20">
+        {/* Header Section */}
+        <div
+          className={`px-4 sm:px-10 flex flex-col sm:flex-row justify-between items-center w-full ${inter.className} pb-4 sm:pb-6 px-4 sm:px-6 md:px-8`}
+        >
+          <div className="mb-4 sm:mb-0">
+            <Image src={'/mokshaSmall.png'} alt="logoSmall" width={100} height={100} className="w-12 sm:w-16" />
+          </div>
+          <div className="flex flex-col sm:flex-row items-center space-y-3 sm:space-y-0 sm:space-x-4">
+            <Link
+              href="/cl-register"
+              className="px-4 sm:px-6 py-3 sm:py-4 bg-transparent border border-white rounded-xl text-white italic font-bold cursor-pointer text-sm sm:text-base"
+            >
+              Registration
+            </Link>
+          </div>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
+
+        {/* Logo Section */}
+        <div className="w-full px-4 sm:px-6 md:px-8 flex flex-col items-center justify-center flex-1">
           <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
+            src={'/mokshalogo.png'}
+            alt="moksha logo"
+            width={1000}
+            height={1000}
+            className="invert w-full max-w-[40rem] sm:max-w-[50rem] md:max-w-[65rem] mx-auto"
           />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
+          <div className={`font-serif text-white font-black text-3xl sm:text-4xl md:text-5xl lg:text-7xl md:-mt-10 uppercase space-x-6 flex`}>
+            <motion.span
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.1, duration: 0.5 }}
+            >
+              We
+            </motion.span>
+            <motion.span
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.3, duration: 0.5 }}
+            >
+              Are
+            </motion.span>
+            <motion.span
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.5, duration: 0.5 }}
+            >
+              Back
+            </motion.span>
+          </div>
+        </div>
+
+        {/* Footer Section */}
+        <div
+          className={`px-4 sm:px-6 md:px-8 pt-8 pb-2 sm:pt-16 sm:pb-4  mx-auto text-white flex flex-col md:flex-row justify-between w-full gap-8 sm:gap-0 mt-auto ${unbounded.className}`}
         >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+          <div className="border-t-4 border-white py-4 px-4 sm:px-0">
+            <h1 className="font-black text-sm sm:text-base md:text-lg">Netaji Subhas University Of Technology</h1>
+            <p className="text-[#C9C9C9] text-xs sm:text-sm">
+              Azad Hind Fauj Marg, Dwarka Sector-3, Dwarka, Delhi, 110078
+            </p>
+          </div>
+          <div className="flex space-x-4 sm:space-x-6 items-center justify-center sm:justify-start px-4 sm:px-0">
+            <Image src={'/gmail.png'} alt="gmail" width={40} height={40} className="w-8 sm:w-10" />
+            <Image src={'/instagram.png'} alt="instagram" width={40} height={40} className="w-8 sm:w-10" />
+            <Image src={'/facebook.png'} alt="facebook" width={40} height={40} className="w-8 sm:w-10" />
+            <Image src={'/x.png'} alt="x " width={40} height={40} className="w-8 sm:w-10" />
+          </div>
+        </div>
+      </div>
     </div>
   );
-}
+};
+
+export default CommingSoon;
