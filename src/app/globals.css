@@ -142,7 +142,8 @@ body {
 
 .play_btn.animate {
   animation: play_button_visible var(--delay) forwards var(--local_delay),
-    play_button_slide var(--local_delay) forwards calc(var(--local_delay) * 2);
+    play_button_slide var(--local_delay) forwards calc(var(--local_delay) * 2),
+    play_button_settle var(--local_delay) forwards calc(var(--delay) * 17);
 }
 
 .play_btn #circle {
@@ -200,8 +201,13 @@ body {
   animation: moksha_logo_ani calc(var(--delay) * 4) forwards calc(var(--delay) * 15);
   transform: translateY(42%);
   opacity: 0;
+  user-select: none;
 }
-
+@keyframes play_button_settle {
+  100% {
+    transform: translateX(calc(50% + 170px)) translateY(calc(var(--initial-y) + 120%));
+  }
+}
 @media screen and (max-width: 1024px) {
   .play_btn {
     --initial-x: -150%;
@@ -210,8 +216,28 @@ body {
   .moksha_logo {
     transform: translateY(38%);
   }
+  @keyframes play_button_settle {
+    100% {
+      transform: translateX(calc(50% + 75px)) translateY(calc(var(--initial-y) + 100%));
+    }
+  }
 }
+
 @media screen and (max-width: 768px) {
+  .play_btn {
+    --initial-x: -150%;
+    --initial-y: -1.6rem;
+  }
+  .moksha_logo {
+    transform: translateY(36%);
+  }
+  @keyframes play_button_settle {
+    100% {
+      transform: translateX(calc(50% + 35px)) translateY(calc(var(--initial-y) + 100%));
+    }
+  }
+}
+@media screen and (max-width: 767px) {
   .play_btn {
     --initial-x: -150%;
     --initial-y: -1.7rem;
@@ -239,4 +265,12 @@ body {
     opacity: 1;
     bottom: 50%;
   }
+}
+
+.super_container {
+  overflow-x: hidden;
+}
+
+.super_container::-webkit-scrollbar {
+  display: none;
 }

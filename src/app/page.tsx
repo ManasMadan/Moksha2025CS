@@ -31,8 +31,13 @@ const CommingSoon = () => {
 
     if (!box || !playBtn) return;
 
-    playBtn.style.setProperty('--final-x', `${box.clientWidth}px`);
-    setWidth(box.clientWidth - 20);
+    if (document.body.clientWidth < 600) {
+      box.style.setProperty('--final-x', `${box.clientWidth - 20}px`);
+      setWidth(box.clientWidth - 20);
+    } else {
+      playBtn.style.setProperty('--final-x', `${box.clientWidth}px`);
+      setWidth(box.clientWidth - 20);
+    }
 
     requestAnimationFrame(() => {
       playBtn.classList.add('animate');
@@ -55,7 +60,7 @@ const CommingSoon = () => {
       <div className="absolute flex-1 h-full w-full flex flex-col z-20">
         {/* Header Section */}
         <div
-          className={`px-4 sm:px-10 flex flex-col sm:flex-row justify-between items-center w-full ${inter.className} pb-4 sm:pb-6 px-4 sm:px-6 md:px-8`}
+          className={`px-4 sm:px-10 flex flex-row justify-between items-center w-full ${inter.className} pb-4 sm:pb-6 px-4 sm:px-6 md:px-8`}
         >
           <div className="mb-4 sm:mb-0">
             <Image src={'/mokshaSmall.png'} alt="logoSmall" width={100} height={100} className="w-12 sm:w-16" />
@@ -71,7 +76,7 @@ const CommingSoon = () => {
         </div>
 
         {/* Logo Section */}
-        <div className="relative w-full px-4 sm:px-6 md:px-8 flex flex-col items-center justify-center flex-1">
+        <div className="super_container relative w-full px-4 sm:px-6 md:px-8 flex flex-col items-center justify-center flex-1">
           <div
             className={`relative text-container font-serif text-white font-black text-4xl md:text-5xl lg:text-7xl md:-mt-10 uppercase space-x-2 xs:space-x-4 md:space-x-6`}
           >
@@ -85,32 +90,26 @@ const CommingSoon = () => {
 
         {/* Footer Section */}
         <div
-          className={`px-4 sm:px-6 md:px-8 pt-8 pb-2 sm:pt-16 sm:pb-4  mx-auto text-white flex flex-col md:flex-row justify-between w-full gap-8 sm:gap-0 mt-auto ${unbounded.className}`}
+          className={`px-4 flex-wrap sm:px-6 md:px-8 pt-8 mb-6 mx-auto text-white flex flex-row justify-center lg:justify-between w-full gap-4 ${unbounded.className}`}
         >
-          <div className="border-t-4 border-white py-4 px-4 sm:px-0">
+          <div className="border-t-4 border-white py-4 px-4">
             <h1 className="font-black text-sm sm:text-base md:text-lg">Netaji Subhas University Of Technology</h1>
             <p className="text-[#C9C9C9] text-xs sm:text-sm">
               Azad Hind Fauj Marg, Dwarka Sector-3, Dwarka, Delhi, 110078
             </p>
           </div>
-          <div className="flex space-x-4 sm:space-x-6 items-center justify-center sm:justify-start px-4 sm:px-0">
+          <div className="flex space-x-6 items-center justify-center px-4">
             <Link href="mailto:moksha@nsut.ac.in" target="_blank">
-              <Image src="/gmail.png" alt="Gmail" width={40} height={40} className="w-8 sm:w-10 cursor-pointer" />
+              <Image src="/gmail.png" alt="Gmail" width={40} height={40} className="w-10 cursor-pointer" />
             </Link>
             <Link href="https://instagram.com/mokshansut" target="_blank">
-              <Image
-                src="/instagram.png"
-                alt="Instagram"
-                width={40}
-                height={40}
-                className="w-8 sm:w-10 cursor-pointer"
-              />
+              <Image src="/instagram.png" alt="Instagram" width={40} height={40} className="w-10 cursor-pointer" />
             </Link>
             <Link href="https://facebook.com/mokshansut" target="_blank">
-              <Image src="/facebook.png" alt="Facebook" width={40} height={40} className="w-8 sm:w-10 cursor-pointer" />
+              <Image src="/facebook.png" alt="Facebook" width={40} height={40} className="w-10 cursor-pointer" />
             </Link>
             <Link href="https://x.com/mokshansut" target="_blank">
-              <Image src="/x.png" alt="X (Twitter)" width={40} height={40} className="w-8 sm:w-10 cursor-pointer" />
+              <Image src="/x.png" alt="X (Twitter)" width={40} height={40} className="w-10 cursor-pointer" />
             </Link>{' '}
           </div>
         </div>
