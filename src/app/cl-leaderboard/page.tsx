@@ -1,6 +1,6 @@
-"use client";
+'use client';
 
-import React, { useState, useMemo, useEffect } from "react";
+import React, { useState, useMemo, useEffect } from 'react';
 import {
   Search,
   Filter,
@@ -9,153 +9,125 @@ import {
   ChevronRight,
   ChevronLeft,
   ChevronsLeft,
-} from "lucide-react";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+  Loader2,
+} from 'lucide-react';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { Cinzel } from "next/font/google";
-import Image from "next/image";
-import { clsx } from "clsx";
+} from '@/components/ui/dropdown-menu';
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
+import { Cinzel } from 'next/font/google';
+import Image from 'next/image';
+import { clsx } from 'clsx';
+import { getLeaderboardData } from '../server/leaderboard';
+
+interface IleaderBoardData {
+  id: number;
+  name: string;
+  points: number;
+  rank: number;
+}
 
 const cinzel = Cinzel({
-  subsets:["latin"],
+  subsets: ['latin'],
 });
 
-const useResponsiveItemsPerPage = () => {
-  const [itemsPerPage, setItemsPerPage] = useState(4);
+const LeaderBoard = () => {
+  const [searchQuery, setSearchQuery] = useState('');
+  const [currentPage, setCurrentPage] = useState(1);
+  const [sortOrder, setSortOrder] = useState('desc');
+  const [filterRank, setFilterRank] = useState('all');
+  const [data, setData] = useState<IleaderBoardData[]>([]);
+  const [showLoading, setShowLoading] = useState(false);
+  const ITEMS_PER_PAGE = 4;
 
   useEffect(() => {
-    const handleResize = () => {
-      if (typeof window !== "undefined") {
-        if (window.innerWidth < 768) {
-          setItemsPerPage(8);
-        } else {
-          setItemsPerPage(4);
-        }
+    const fetchData = async () => {
+      try {
+        const response = await getLeaderboardData();
+        if (response.status !== 'success') throw new Error('Failed to fetch');
+        const leaderboardData = JSON.parse(response.data);
+        setData(
+          leaderboardData
+            .sort((a: IleaderBoardData, b: IleaderBoardData) => b.points - a.points)
+            .map((item: IleaderBoardData, index: number) => ({ ...item, rank: index + 1 }))
+        );
+        setShowLoading(false); // Add this state
+      } catch (error) {
+        console.error('Error loading data:', error);
+        setShowLoading(true); // Show loading overlay
+        // Retry after 5 seconds
+        setTimeout(() => {
+          fetchData();
+        }, 5000);
       }
     };
 
-    handleResize();
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
+    fetchData();
   }, []);
 
-  return itemsPerPage;
-};
-
-const sampleData = [
-  { id: 1, name: "John", points: 4534, rank: 1 },
-  { id: 2, name: "Pranjul", points: 4432, rank: 2 },
-  { id: 3, name: "Sanvi", points: 4398, rank: 3 },
-  { id: 4, name: "Sarah", points: 4345, rank: 4 },
-  { id: 5, name: "Michael", points: 4289, rank: 5 },
-  { id: 6, name: "Emily", points: 4267, rank: 6 },
-  { id: 7, name: "David", points: 4234, rank: 7 },
-  { id: 8, name: "Lisa", points: 4198, rank: 8 },
-  { id: 9, name: "James", points: 4167, rank: 9 },
-  { id: 10, name: "Anna", points: 4132, rank: 10 },
-];
-
-const LeaderBoard = () => {
-  const [searchQuery, setSearchQuery] = useState("");
-  const [currentPage, setCurrentPage] = useState(1);
-  const [sortOrder, setSortOrder] = useState("desc");
-  const [filterRank, setFilterRank] = useState("all");
-  const ITEMS_PER_PAGE = useResponsiveItemsPerPage();
-
   const filteredAndSortedData = useMemo(() => {
-    return sampleData
+    return data
       .filter((item) => {
-        const matchesSearch = item.name
-          .toLowerCase()
-          .includes(searchQuery.toLowerCase());
+        const matchesSearch = item.name.toLowerCase().includes(searchQuery.toLowerCase());
         const matchesRank =
-          filterRank === "all" ||
-          (filterRank === "top5" && item.rank <= 5) ||
-          (filterRank === "others" && item.rank > 5);
+          filterRank === 'all' ||
+          (filterRank === 'top5' && item.rank <= 5) ||
+          (filterRank === 'others' && item.rank > 5);
         return matchesSearch && matchesRank;
       })
       .sort((a, b) => {
-        const sortVal = sortOrder === "desc" ? -1 : 1;
+        const sortVal = sortOrder === 'desc' ? -1 : 1;
         return (a.points - b.points) * sortVal;
       });
-  }, [searchQuery, sortOrder, filterRank]);
+  }, [searchQuery, sortOrder, filterRank, data]);
 
-  const topPlayers = sampleData.slice(0, 5);
+  const topPlayers = data.slice(0, 5);
   const pageCount = Math.ceil(filteredAndSortedData.length / ITEMS_PER_PAGE);
-  const currentData = filteredAndSortedData.slice(
-    (currentPage - 1) * ITEMS_PER_PAGE,
-    currentPage * ITEMS_PER_PAGE
-  );
+  const currentData = filteredAndSortedData.slice((currentPage - 1) * ITEMS_PER_PAGE, currentPage * ITEMS_PER_PAGE);
 
   const getBarHeight = (rank: number) => {
     switch (rank) {
       case 1:
-        return "h-[408px] md:h-[408px] sm:h-[300px]";
+        return 'h-[300px] md:h-[408px] sm:h-[300px]';
       case 2:
-        return "h-[344px] md:h-[344px] sm:h-[250px]";
+        return 'h-[250px] md:h-[344px] sm:h-[250px]';
       case 3:
-        return "h-[232px] md:h-[232px] sm:h-[200px]";
+        return 'h-[200px] md:h-[232px] sm:h-[200px]';
       case 4:
-        return "h-[136px] md:h-[136px] sm:h-[150px]";
+        return 'h-[150px] md:h-[136px] sm:h-[150px]';
       case 5:
-        return "h-[72px] md:h-[72px] sm:h-[100px]";
+        return 'h-[100px] md:h-[72px] sm:h-[100px]';
       default:
-        return "h-40";
+        return 'h-40';
     }
   };
 
   const podiumOrder = [4, 3, 1, 2, 5];
 
   const getRankIcon = (rank: number) => {
-    const iconClasses = "w-14 h-14 md:w-14 md:h-14 sm:w-10 sm:h-10 mx-auto";
+    const iconClasses = 'w-10 h-10 md:w-14 md:h-14 sm:w-10 sm:h-10 mx-auto';
 
     if (rank === 1)
       return (
         <div className="pt-12 sm:pt-8">
-          <Image
-            alt="crown"
-            src="/crown.png"
-            className={iconClasses}
-            width={100}
-            height={100}
-          />
+          <Image alt="crown" src="/crown.png" className={iconClasses} width={100} height={100} />
         </div>
       );
     if (rank === 2)
       return (
         <div className="pt-12 sm:pt-8">
-          <Image
-            alt="laurelwreath"
-            src="/laurelwreath.png"
-            className={iconClasses}
-            width={100}
-            height={100}
-          />
+          <Image alt="laurelwreath" src="/laurelwreath.png" className={iconClasses} width={100} height={100} />
         </div>
       );
     if (rank === 3)
       return (
         <div className="pt-12 sm:pt-8">
-          <Image
-            alt="trophy"
-            src="/trophy.png"
-            className={iconClasses}
-            width={100}
-            height={100}
-          />
+          <Image alt="trophy" src="/trophy.png" className={iconClasses} width={100} height={100} />
         </div>
       );
 
@@ -164,44 +136,47 @@ const LeaderBoard = () => {
 
   return (
     <div className="min-h-screen w-full relative">
+      {showLoading && (
+        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center">
+          <div className="bg-[#000545]/90 p-8 rounded-xl shadow-2xl flex flex-col items-center max-w-md mx-4">
+            <Loader2 className="h-12 w-12 text-white animate-spin mb-4" />
+          </div>
+        </div>
+      )}
       <div className="fixed inset-0 bg-[url('/cl_bg.png')] bg-cover bg-center bg-no-repeat" />
       <div className="fixed inset-0 bg-gradient-to-b from-[#1A3BAA] to-transparent opacity-60 mix-blend-overlay" />
       <div className="relative z-10 w-full py-8 px-4">
         <div className={`${cinzel.className} max-w-7xl mx-auto`}>
-          <h1 className="text-white text-center mb-8 md:mb-24 tracking-wide font-[549] text-3xl xs:text-4xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl text-nowrap">
+          <h1 className="text-white text-center mb-16 md:mb-24 tracking-wide font-[549] text-3xl xs:text-4xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl text-nowrap">
             CL LEADERBOARD
           </h1>
 
           {/* Top Players Podium */}
-          <div className="relative mb-16 md:mb-24 hidden md:block">
+          <div className="relative mb-16 md:mb-24">
             {/* Podium Grid */}
-            <div className="grid grid-cols-5 gap-2 sm:gap-4 lg:gap-8 h-full relative px-2 sm:px-4">
-              {podiumOrder.map((position) => {
+            <div className="grid grid-cols-5 gap-3 sm:gap-7 lg:gap-8 h-full relative px-2 sm:px-4">
+              {podiumOrder.map((position, index) => {
                 const player = topPlayers.find((p) => p.rank === position);
-                if (!player) return null;
+                if (!player) return <div key={index}></div>;
 
                 return (
-                  <div
-                    key={player.id}
-                    className="relative flex flex-col items-center justify-end h-full"
-                  >
+                  <div key={index} className="relative flex flex-col items-center justify-end h-full">
                     {/* Bar */}
                     <div className="w-full relative">
                       <div
                         className={clsx(
-                          "w-full rounded-t-3xl transition-all duration-300",
+                          'w-full rounded-t-xl  md:rounded-t-2xl lg:rounded-t-3xl transition-all duration-300',
                           getBarHeight(player.rank),
                           position === 1 || position === 4 || position === 5
-                            ? "bg-gradient-to-b from-[#000545] via-[#000545f4] to-transparent"
-                            : "bg-gradient-to-b from-[#002173] via-[#002173f4] to-transparent"
+                            ? 'bg-gradient-to-b from-[#000545] via-[#000545f4] to-transparent'
+                            : 'bg-gradient-to-b from-[#002173] via-[#002173f4] to-transparent'
                         )}
                       >
                         {getRankIcon(player.rank)}
                       </div>
 
                       {/* Profile Box */}
-                      <div className="absolute -top-24 sm:-top-28 md:-top-36 left-1/2 transform -translate-x-1/2">
-                        <div className="w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 bg-black rounded-3xl flex items-center justify-center mb-2 mx-auto" />
+                      <div className="absolute -top-10 md:-top-12 left-1/2 transform -translate-x-1/2">
                         <p className="text-white font-bold text-base sm:text-xl md:text-2xl text-center whitespace-nowrap">
                           {player.name}
                         </p>
@@ -240,21 +215,14 @@ const LeaderBoard = () => {
 
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button
-                  variant="outline"
-                  className="w-full md:w-auto bg-white text-black rounded-full"
-                >
+                <Button variant="outline" className="w-full md:w-auto bg-white text-black rounded-full">
                   <ArrowUpDown className="w-4 h-4 mr-2" />
                   Sort By
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent>
-                <DropdownMenuItem onClick={() => setSortOrder("desc")}>
-                  Highest Points
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => setSortOrder("asc")}>
-                  Lowest Points
-                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => setSortOrder('desc')}>Highest Points</DropdownMenuItem>
+                <DropdownMenuItem onClick={() => setSortOrder('asc')}>Lowest Points</DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
           </div>
@@ -269,21 +237,17 @@ const LeaderBoard = () => {
               <div
                 key={item.id}
                 className={`flex justify-between items-center px-4 sm:px-8 py-4 rounded-2xl transition-colors 
-                  ${index % 2 === 0 ? "bg-[#010E2BB2]" : "bg-[#4FB8D1CC]"}
+                  ${index % 2 === 0 ? 'bg-[#010E2BB2]' : 'bg-[#4FB8D1CC]'}
               `}
               >
-                <span className="text-white text-sm sm:text-base">
-                  {item.name}
-                </span>
-                <span className="text-white text-sm sm:text-base">
-                  {item.points}
-                </span>
+                <span className="text-white text-sm sm:text-base">{item.name}</span>
+                <span className="text-white text-sm sm:text-base">{item.points}</span>
               </div>
             ))}
           </div>
 
           {/* Pagination */}
-          <div className="flex justify-center items-center gap-1 sm:gap-2">
+          <div className="flex justify-center items-center gap-1 sm:gap-2 p-4 bg-[#000545]/80 w-fit mx-auto rounded-xl">
             <Button
               variant="ghost"
               className="text-white text-xl disabled:opacity-50 rounded-full h-8 w-8 sm:h-10 sm:w-10"
@@ -305,9 +269,9 @@ const LeaderBoard = () => {
             {Array.from({ length: pageCount }, (_, i) => i + 1).map((page) => (
               <Button
                 key={page}
-                variant={currentPage === page ? "default" : "ghost"}
+                variant={currentPage === page ? 'default' : 'ghost'}
                 className={`w-8 h-8 sm:w-12 sm:h-12 p-0 rounded-full text-base sm:text-xl ${
-                  currentPage === page ? "bg-[#0C1A42]" : "text-white"
+                  currentPage === page ? 'bg-[#0C1A42]' : 'text-white'
                 }`}
                 onClick={() => setCurrentPage(page)}
               >
@@ -318,9 +282,7 @@ const LeaderBoard = () => {
             <Button
               variant="ghost"
               className="text-white text-xl disabled:opacity-50 rounded-full h-8 w-8 sm:h-10 sm:w-10"
-              onClick={() =>
-                setCurrentPage((prev) => Math.min(pageCount, prev + 1))
-              }
+              onClick={() => setCurrentPage((prev) => Math.min(pageCount, prev + 1))}
               disabled={currentPage === pageCount}
             >
               <ChevronRight className="w-6 h-6 sm:w-8 sm:h-8" />
