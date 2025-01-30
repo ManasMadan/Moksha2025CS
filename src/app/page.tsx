@@ -93,6 +93,7 @@ const CommingSoon = () => {
         <div data-vjs-player className="w-full h-full overflow-hidden inset-0 max-w-screen max-h-screen">
           <video
             ref={videoRef}
+            playsInline
             className="video-js vjs-default-skin vjs-fullscreen vjs-big-play-centered"
             style={{ position: 'absolute', width: '100%', height: '100%', objectFit: 'cover' }}
           />
@@ -104,17 +105,23 @@ const CommingSoon = () => {
       <div className="absolute flex-1 h-full w-full flex flex-col z-20">
         {/* Header Section */}
         <div
-          className={`px-4 sm:px-10 flex flex-row justify-between items-center w-full ${inter.className} pb-4 sm:pb-6 px-4 sm:px-6 md:px-8`}
+          className={`px-4 sm:px-10 flex flex-col xs:flex-row justify-between items-center w-full ${inter.className} pb-4 sm:pb-6 px-4 sm:px-6 md:px-8`}
         >
           <div className="mb-4 sm:mb-0">
             <Image src={'/mokshaSmall.png'} alt="logoSmall" width={100} height={100} className="w-12 sm:w-16" />
           </div>
-          <div className="flex flex-col sm:flex-row items-center space-y-3 sm:space-y-0 sm:space-x-4">
+          <div className="flex flex-row items-center space-x-4 pb-4">
             <Link
               href="/cl-register"
               className="px-4 sm:px-6 py-3 sm:py-4 bg-transparent border border-white rounded-xl text-white italic font-bold cursor-pointer text-sm sm:text-base"
             >
               Registration
+            </Link>
+            <Link
+              href="/cl-leaderboard"
+              className="px-4 sm:px-6 py-3 sm:py-4 bg-transparent border border-white rounded-xl text-white italic font-bold cursor-pointer text-sm sm:text-base"
+            >
+              Leaderboard
             </Link>
           </div>
         </div>
