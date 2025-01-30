@@ -93,6 +93,7 @@ const CommingSoon = () => {
         <div data-vjs-player className="w-full h-full overflow-hidden inset-0 max-w-screen max-h-screen">
           <video
             ref={videoRef}
+            playsInline
             className="video-js vjs-default-skin vjs-fullscreen vjs-big-play-centered"
             style={{ position: 'absolute', width: '100%', height: '100%', objectFit: 'cover' }}
           />
