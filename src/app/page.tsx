@@ -32,10 +32,19 @@ const CommingSoon = () => {
     if (!box || !playBtn) return;
 
     if (document.body.clientWidth < 600) {
+      playBtn.style.setProperty('--initial-x', `-${100}px`);
+      playBtn.style.setProperty('--initial-y', `${(-1 * playBtn.clientHeight) / 4}px`);
+
       box.style.setProperty('--final-x', `${box.clientWidth - 20}px`);
+      box.style.setProperty('--settling-x', `${box.clientWidth / 2 - playBtn.clientWidth / 2}px`);
+      box.style.setProperty('--settling-y', `100px`);
       setWidth(box.clientWidth - 20);
     } else {
-      playBtn.style.setProperty('--final-x', `${box.clientWidth}px`);
+      playBtn.style.setProperty('--initial-x', `-${100}px`);
+      playBtn.style.setProperty('--initial-y', `${(-1 * playBtn.clientHeight) / 5}px`);
+      box.style.setProperty('--final-x', `${box.clientWidth}px`);
+      box.style.setProperty('--settling-x', `${box.clientWidth / 2 - playBtn.clientWidth / 2}px`);
+      box.style.setProperty('--settling-y', `100px`);
       setWidth(box.clientWidth - 20);
     }
 

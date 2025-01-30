@@ -138,6 +138,8 @@ body {
   opacity: 0;
 
   cursor: pointer;
+
+  margin: 0 !important;
 }
 
 .play_btn.animate {
@@ -205,7 +207,7 @@ body {
 }
 @keyframes play_button_settle {
   100% {
-    transform: translateX(calc(50% + 170px)) translateY(calc(var(--initial-y) + 120%));
+    transform: translateX(var(--settling-x)) translateY(var(--settling-y));
   }
 }
 @media screen and (max-width: 1024px) {
@@ -216,11 +218,6 @@ body {
   .moksha_logo {
     transform: translateY(38%);
   }
-  @keyframes play_button_settle {
-    100% {
-      transform: translateX(calc(50% + 75px)) translateY(calc(var(--initial-y) + 100%));
-    }
-  }
 }
 
 @media screen and (max-width: 768px) {
@@ -230,11 +227,6 @@ body {
   }
   .moksha_logo {
     transform: translateY(36%);
-  }
-  @keyframes play_button_settle {
-    100% {
-      transform: translateX(calc(50% + 35px)) translateY(calc(var(--initial-y) + 100%));
-    }
   }
 }
 @media screen and (max-width: 767px) {
