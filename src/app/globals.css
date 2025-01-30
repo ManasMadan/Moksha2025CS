@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --delay: 200ms;
+}
+
 body {
   font-family: Arial, Helvetica, sans-serif;
 }
@@ -93,4 +97,97 @@ body {
 
 ::-webkit-scrollbar-thumb:active {
   background: linear-gradient(180deg, rgba(0, 200, 255, 1), rgba(0, 90, 200, 1)); /* Even brighter blue on click */
+}
+
+.animated_fade_in {
+  opacity: 0;
+  animation: text_we_are_back 1s forwards;
+  display: inline-block;
+}
+
+.animated_fade_in:nth-child(1) {
+  animation-delay: calc(var(--delay) * 0);
+}
+.animated_fade_in:nth-child(2) {
+  animation-delay: calc(var(--delay) * 1);
+}
+.animated_fade_in:nth-child(3) {
+  animation-delay: calc(var(--delay) * 2);
+}
+
+.play_btn {
+  --local_delay: calc(var(--delay) * 5);
+  --initial-x: -150%;
+  --initial-y: -12%;
+
+  left: 0;
+  display: inline-block;
+  position: absolute;
+  transform: translateX(var(--initial-x)) translateY(var(--initial-y));
+  opacity: 0;
+}
+
+.play_btn.animate {
+  animation: play_button_visible var(--delay) forwards var(--local_delay),
+    play_button_slide var(--local_delay) forwards calc(var(--local_delay) * 2);
+}
+
+.play_btn #circle {
+  transform-origin: center;
+  transform: rotate(0deg);
+  animation: rotate 3s linear infinite calc(var(--local_delay) * 3.5);
+}
+
+@keyframes rotate {
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes play_button_visible {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes play_button_slide {
+  0% {
+    transform: translateX(var(--initial-x)) translateY(var(--initial-y));
+  }
+  100% {
+    transform: translateX(var(--final-x)) translateY(var(--initial-y));
+  }
+}
+
+@media screen and (max-width: 1024px) {
+  .play_btn {
+    --initial-x: -150%;
+    --initial-y: -1.5rem;
+  }
+}
+@media screen and (max-width: 768px) {
+  .play_btn {
+    --initial-x: -150%;
+    --initial-y: -1.7rem;
+  }
+}
+@media screen and (max-width: 640px) {
+  .play_btn {
+    --initial-x: -80%;
+    --initial-y: -1.8rem;
+  }
+}
+
+@keyframes text_we_are_back {
+  0% {
+    opacity: 0;
+    transform: translateY(min(100px, 5vh));
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0px);
+  }
 }
