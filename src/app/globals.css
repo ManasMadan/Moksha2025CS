@@ -101,7 +101,7 @@ body {
 
 .text-container {
   position: absolute;
-  top: 50%;
+  top: 40%;
   left: 50%;
   transform: translate(-50%, -50%);
   height: 100px;
@@ -211,7 +211,7 @@ body {
 
 .moksha_logo {
   position: absolute;
-  top: 50%;
+  top: 40%;
   left: 50%;
   transform: translateX(-50%) translateY(min(100px, 5vh));
   opacity: 0;

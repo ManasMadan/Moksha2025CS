@@ -74,7 +74,7 @@ const CommingSoon = () => {
     const playBtn = document.querySelector('.play_btn') as HTMLElement;
     if (!text_container || !playBtn) return;
     playBtn.style.setProperty('--initial-x', `${text_container.offsetLeft - text_container.clientWidth / 2 - 100}px`);
-    playBtn.style.setProperty('--initial-y', `50%`);
+    playBtn.style.setProperty('--initial-y', `40%`);
     playBtn.style.setProperty('--final-x', `${text_container.offsetLeft + text_container.clientWidth / 2 + 100}px`);
     playBtn.style.setProperty(
       '--settle-y',
@@ -87,10 +87,10 @@ const CommingSoon = () => {
   }, []);
 
   return (
-    <div className="w-full min-h-screen h-full bg-black">
+    <div className="w-full min-h-[100dvh] h-full bg-black">
       {/* Video Background */}
-      <div className="absolute overflow-hidden inset-0 w-full h-full">
-        <div data-vjs-player className="w-full h-full">
+      <div className="absolute overflow-hidden inset-0 max-w-screen max-h-screen">
+        <div data-vjs-player className="w-full h-full overflow-hidden inset-0 max-w-screen max-h-screen">
           <video
             ref={videoRef}
             className="video-js vjs-default-skin vjs-fullscreen vjs-big-play-centered"
@@ -136,7 +136,7 @@ const CommingSoon = () => {
         <div
           className={`px-4 flex-wrap sm:px-6 md:px-8 pt-8 mb-6 mx-auto text-white flex flex-row justify-center lg:justify-between w-full gap-4 ${unbounded.className}`}
         >
-          <div className="border-t-4 border-white py-4 px-4">
+          <div className="border-t-4 border-white py-4 px-4 hidden sm:block">
             <h1 className="font-black text-sm sm:text-base md:text-lg">Netaji Subhas University Of Technology</h1>
             <p className="text-[#C9C9C9] text-xs sm:text-sm">
               Azad Hind Fauj Marg, Dwarka Sector-3, Dwarka, Delhi, 110078
@@ -144,16 +144,22 @@ const CommingSoon = () => {
           </div>
           <div className="flex space-x-6 items-center justify-center px-4">
             <Link href="mailto:moksha@nsut.ac.in" target="_blank">
-              <Image src="/gmail.png" alt="Gmail" width={40} height={40} className="w-10 cursor-pointer" />
+              <Image src="/gmail.png" alt="Gmail" width={40} height={40} className="w-7 md:w-10 cursor-pointer" />
             </Link>
             <Link href="https://instagram.com/mokshansut" target="_blank">
-              <Image src="/instagram.png" alt="Instagram" width={40} height={40} className="w-10 cursor-pointer" />
+              <Image
+                src="/instagram.png"
+                alt="Instagram"
+                width={40}
+                height={40}
+                className="w-7 md:w-10 cursor-pointer"
+              />
             </Link>
             <Link href="https://facebook.com/mokshansut" target="_blank">
-              <Image src="/facebook.png" alt="Facebook" width={40} height={40} className="w-10 cursor-pointer" />
+              <Image src="/facebook.png" alt="Facebook" width={40} height={40} className="w-7 md:w-10 cursor-pointer" />
             </Link>
             <Link href="https://x.com/mokshansut" target="_blank">
-              <Image src="/x.png" alt="X (Twitter)" width={40} height={40} className="w-10 cursor-pointer" />
+              <Image src="/x.png" alt="X (Twitter)" width={40} height={40} className="w-7 md:w-10 cursor-pointer" />
             </Link>{' '}
           </div>
         </div>
