@@ -4,7 +4,6 @@
 
 :root {
   --delay: 200ms;
-  --rotation_start_delay: calc(var(--delay) * 10); /* Sync with when the rotation begins */
 }
 
 body {
@@ -100,11 +99,29 @@ body {
   background: linear-gradient(180deg, rgba(0, 200, 255, 1), rgba(0, 90, 200, 1)); /* Even brighter blue on click */
 }
 
+.text-container {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  height: 100px;
+}
+
 .animated_fade_in {
   opacity: 0;
-  animation: text_we_are_back 1s forwards var(--local-delay),
-    fade_out 1s forwards calc(var(--local-delay) * 0.98 + var(--rotation_start_delay)); /* Adjusted delay */
+  animation: text_we_are_back 1s forwards var(--local-delay), fade_out 1s calc(var(--local-delay) / 4 + 1.6s) forwards;
   display: inline-block;
+}
+
+@keyframes text_we_are_back {
+  0% {
+    opacity: 0;
+    transform: translateY(min(100px, 5vh));
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0px);
+  }
 }
 
 @keyframes fade_out {
@@ -127,25 +144,55 @@ body {
 }
 
 .play_btn {
-  --local_delay: calc(var(--delay) * 5);
-  --initial-x: -150%;
-  --initial-y: -12%;
-
-  left: 0;
-  display: inline-block;
+  --local_delay: calc(var(--delay) * 3);
   position: absolute;
-  transform: translateX(var(--initial-x)) translateY(var(--initial-y));
+  left: var(--initial-x);
+  top: var(--initial-y);
+  transform: translate(-50%, -50%);
   opacity: 0;
 
   cursor: pointer;
-
-  margin: 0 !important;
 }
 
 .play_btn.animate {
   animation: play_button_visible var(--delay) forwards var(--local_delay),
     play_button_slide var(--local_delay) forwards calc(var(--local_delay) * 2),
-    play_button_settle var(--local_delay) forwards calc(var(--delay) * 17);
+    play_button_settle var(--local_delay) forwards calc(var(--delay) * 5 + 1.3s);
+}
+
+@keyframes play_button_visible {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes play_button_slide {
+  0% {
+    left: var(--initial-x);
+  }
+  100% {
+    left: var(--final-x);
+  }
+}
+
+@media screen and (min-width: 1024px) {
+  .play_btn {
+    --desktop-offset: 25px;
+  }
+}
+
+@keyframes play_button_settle {
+  0% {
+    left: var(--final-x);
+    top: var(--initial-y);
+  }
+  100% {
+    left: 50%;
+    top: calc(50% + 100px + var(--desktop-offset, 0));
+  }
 }
 
 .play_btn #circle {
@@ -167,102 +214,23 @@ body {
     opacity: 1;
   }
 }
-@keyframes play_button_visible {
-  0% {
-    opacity: 0;
-  }
-  100% {
-    opacity: 1;
-  }
-}
-
-@keyframes play_button_slide {
-  0% {
-    transform: translateX(var(--initial-x)) translateY(var(--initial-y));
-  }
-  100% {
-    transform: translateX(var(--final-x)) translateY(var(--initial-y));
-  }
-}
-
-@keyframes text_we_are_back {
-  0% {
-    opacity: 0;
-    transform: translateY(min(100px, 5vh));
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0px);
-  }
-}
 
 .moksha_logo {
-  height: fit-content;
   position: absolute;
-  bottom: 0px;
-  animation: moksha_logo_ani calc(var(--delay) * 4) forwards calc(var(--delay) * 15);
-  transform: translateY(42%);
+  top: 50%;
+  left: 50%;
+  transform: translateX(-50%) translateY(min(100px, 5vh));
   opacity: 0;
-  user-select: none;
-}
-@keyframes play_button_settle {
-  100% {
-    transform: translateX(var(--settling-x)) translateY(var(--settling-y));
-  }
-}
-@media screen and (max-width: 1024px) {
-  .play_btn {
-    --initial-x: -150%;
-    --initial-y: -1.5rem;
-  }
-  .moksha_logo {
-    transform: translateY(38%);
-  }
+  animation: moksha_logo_animation calc(var(--delay) * 5) forwards 2s;
 }
 
-@media screen and (max-width: 768px) {
-  .play_btn {
-    --initial-x: -150%;
-    --initial-y: -1.6rem;
-  }
-  .moksha_logo {
-    transform: translateY(36%);
-  }
-}
-@media screen and (max-width: 767px) {
-  .play_btn {
-    --initial-x: -150%;
-    --initial-y: -1.7rem;
-  }
-  .moksha_logo {
-    transform: translateY(52%);
-  }
-}
-@media screen and (max-width: 640px) {
-  .play_btn {
-    --initial-x: -80%;
-    --initial-y: -1.8rem;
-  }
-  .moksha_logo {
-    transform: translateY(55%);
-  }
-}
-
-@keyframes moksha_logo_ani {
+@keyframes moksha_logo_animation {
   0% {
     opacity: 0;
-    bottom: 0px;
+    transform: translateX(-50%) translateY(min(100px, 5vh));
   }
   100% {
     opacity: 1;
-    bottom: 50%;
+    transform: translateX(-50%) translateY(-50%);
   }
-}
-
-.super_container {
-  overflow-x: hidden;
-}
-
-.super_container::-webkit-scrollbar {
-  display: none;
 }

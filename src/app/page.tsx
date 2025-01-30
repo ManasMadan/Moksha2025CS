@@ -26,35 +26,20 @@ const CommingSoon = () => {
   }, []);
 
   useEffect(() => {
-    const box = document.querySelector('.text-container') as HTMLElement;
+    const text_container = document.querySelector('.text-container') as HTMLElement;
     const playBtn = document.querySelector('.play_btn') as HTMLElement;
-
-    if (!box || !playBtn) return;
-
-    if (document.body.clientWidth < 600) {
-      playBtn.style.setProperty('--initial-x', `-${100}px`);
-      playBtn.style.setProperty('--initial-y', `${(-1 * playBtn.clientHeight) / 4}px`);
-
-      box.style.setProperty('--final-x', `${box.clientWidth - 20}px`);
-      box.style.setProperty('--settling-x', `${box.clientWidth / 2 - playBtn.clientWidth / 2}px`);
-      box.style.setProperty('--settling-y', `100px`);
-      setWidth(box.clientWidth - 20);
-    } else {
-      playBtn.style.setProperty('--initial-x', `-${100}px`);
-      playBtn.style.setProperty('--initial-y', `${(-1 * playBtn.clientHeight) / 5}px`);
-      box.style.setProperty('--final-x', `${box.clientWidth}px`);
-      box.style.setProperty('--settling-x', `${box.clientWidth / 2 - playBtn.clientWidth / 2}px`);
-      box.style.setProperty('--settling-y', `100px`);
-      setWidth(box.clientWidth - 20);
-    }
-
+    if (!text_container || !playBtn) return;
+    playBtn.style.setProperty('--initial-x', `${text_container.offsetLeft - text_container.clientWidth / 2 - 100}px`);
+    playBtn.style.setProperty('--initial-y', `50%`);
+    playBtn.style.setProperty('--final-x', `${text_container.offsetLeft + text_container.clientWidth / 2 + 100}px`);
+    setWidth(text_container.clientWidth - 20);
     requestAnimationFrame(() => {
       playBtn.classList.add('animate');
     });
   }, []);
 
   return (
-    <div className="relative w-full min-h-screen h-full bg-black">
+    <div className="w-full min-h-screen h-full bg-black">
       {/* Video Background */}
       <video
         preload="metadata"
@@ -86,15 +71,15 @@ const CommingSoon = () => {
         </div>
 
         {/* Logo Section */}
-        <div className="super_container relative w-full px-4 sm:px-6 md:px-8 flex flex-col items-center justify-center flex-1">
+        <div className="super_container w-full px-4 sm:px-6 md:px-8 flex flex-col items-center justify-center flex-1">
           <div
-            className={`relative text-container font-serif text-white font-black text-4xl md:text-5xl lg:text-7xl md:-mt-10 uppercase space-x-2 xs:space-x-4 md:space-x-6`}
+            className={`flex gap-4 justify-center items-center text-container font-serif text-white font-black text-4xl md:text-5xl lg:text-7xl uppercase`}
           >
             <div className="animated_fade_in">WE</div>
             <div className="animated_fade_in">ARE</div>
             <div className="animated_fade_in">BACK</div>
-            <PlayPauseButton setVideoMuted={setVideoMuted} videoMuted={videoMuted} />
           </div>
+          <PlayPauseButton setVideoMuted={setVideoMuted} videoMuted={videoMuted} />
           <img className="moksha_logo" src={'/mokshalogo.png'} alt="moksha logo" width={width} />
         </div>
 
@@ -139,7 +124,7 @@ const PlayPauseButton = ({
 }) => {
   return (
     <div
-      className="play_btn z-50"
+      className="play_btn z-50 grid place-items-center"
       onClick={() => {
         setVideoMuted(!videoMuted);
       }}
