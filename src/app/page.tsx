@@ -9,9 +9,9 @@ const inter = Inter({ subsets: ['latin'] });
 const unbounded = Unbounded({ subsets: ['latin'] });
 
 const videoLinks = [
-  'https://moksha2025.b-cdn.net/7b2f0a8c9e3d1b5a4f6c8e2d0b7a9c3f1e4d8b5a2c6f9e3d1b5a4f6c8e2d0b7.mp4',
-  'https://moksha2025.b-cdn.net/e9c7a01e4ac489c13f44573d38fa1265983c8f3fb4c538f289fdc6612c2e9519.mp4',
-  'https://moksha2025.b-cdn.net/f1d8e4b5a2c6f9e3d1b5a4f6c8e2d0b7a9c3f1e4d8b5a2c6f9e3d1b5a4f6c8e.mp4',
+  'https://moksha2025.b-cdn.net/7b2f0a8c9e3d1b5a4f6c8e2d0b7a9c3f1e4d8b5a2c6f9e3d1b5a4f6c8e2d0b8.mp4',
+  'https://moksha2025.b-cdn.net/e9c7a01e4ac489c13f44573d38fa1265983c8f3fb4c538f289fdc6612c2e9518.mp4',
+  'https://moksha2025.b-cdn.net/f1d8e4b5a2c6f9e3d1b5a4f6c8e2d0b7a9c3f1e4d8b5a2c6f9e3d1b5a4f6c88.mp4',
 ];
 
 const CommingSoon = () => {
@@ -57,6 +57,7 @@ const CommingSoon = () => {
     <div className="relative w-full min-h-screen h-full bg-black">
       {/* Video Background */}
       <video
+        preload="metadata"
         autoPlay
         muted={videoMuted}
         loop
