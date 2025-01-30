@@ -4,6 +4,7 @@
 
 :root {
   --delay: 200ms;
+  --rotation_start_delay: calc(var(--delay) * 10); /* Sync with when the rotation begins */
 }
 
 body {
@@ -101,18 +102,28 @@ body {
 
 .animated_fade_in {
   opacity: 0;
-  animation: text_we_are_back 1s forwards;
+  animation: text_we_are_back 1s forwards var(--local-delay),
+    fade_out 1s forwards calc(var(--local-delay) * 0.98 + var(--rotation_start_delay)); /* Adjusted delay */
   display: inline-block;
 }
 
+@keyframes fade_out {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
 .animated_fade_in:nth-child(1) {
-  animation-delay: calc(var(--delay) * 0);
+  --local-delay: calc(var(--delay) * 0);
 }
 .animated_fade_in:nth-child(2) {
-  animation-delay: calc(var(--delay) * 1);
+  --local-delay: calc(var(--delay) * 1);
 }
 .animated_fade_in:nth-child(3) {
-  animation-delay: calc(var(--delay) * 2);
+  --local-delay: calc(var(--delay) * 2);
 }
 
 .play_btn {
@@ -125,6 +136,8 @@ body {
   position: absolute;
   transform: translateX(var(--initial-x)) translateY(var(--initial-y));
   opacity: 0;
+
+  cursor: pointer;
 }
 
 .play_btn.animate {
@@ -133,9 +146,11 @@ body {
 }
 
 .play_btn #circle {
+  opacity: 0;
   transform-origin: center;
   transform: rotate(0deg);
-  animation: rotate 3s linear infinite calc(var(--local_delay) * 3.5);
+  animation: rotate 3s linear infinite calc(var(--local_delay) * 3.5),
+    circlefadein 3s forwards calc(var(--local_delay) * 3.5);
 }
 
 @keyframes rotate {
@@ -144,6 +159,11 @@ body {
   }
 }
 
+@keyframes circlefadein {
+  100% {
+    opacity: 1;
+  }
+}
 @keyframes play_button_visible {
   0% {
     opacity: 0;
@@ -162,25 +182,6 @@ body {
   }
 }
 
-@media screen and (max-width: 1024px) {
-  .play_btn {
-    --initial-x: -150%;
-    --initial-y: -1.5rem;
-  }
-}
-@media screen and (max-width: 768px) {
-  .play_btn {
-    --initial-x: -150%;
-    --initial-y: -1.7rem;
-  }
-}
-@media screen and (max-width: 640px) {
-  .play_btn {
-    --initial-x: -80%;
-    --initial-y: -1.8rem;
-  }
-}
-
 @keyframes text_we_are_back {
   0% {
     opacity: 0;
@@ -189,5 +190,53 @@ body {
   100% {
     opacity: 1;
     transform: translateY(0px);
+  }
+}
+
+.moksha_logo {
+  height: fit-content;
+  position: absolute;
+  bottom: 0px;
+  animation: moksha_logo_ani calc(var(--delay) * 4) forwards calc(var(--delay) * 15);
+  transform: translateY(42%);
+  opacity: 0;
+}
+
+@media screen and (max-width: 1024px) {
+  .play_btn {
+    --initial-x: -150%;
+    --initial-y: -1.5rem;
+  }
+  .moksha_logo {
+    transform: translateY(38%);
+  }
+}
+@media screen and (max-width: 768px) {
+  .play_btn {
+    --initial-x: -150%;
+    --initial-y: -1.7rem;
+  }
+  .moksha_logo {
+    transform: translateY(52%);
+  }
+}
+@media screen and (max-width: 640px) {
+  .play_btn {
+    --initial-x: -80%;
+    --initial-y: -1.8rem;
+  }
+  .moksha_logo {
+    transform: translateY(55%);
+  }
+}
+
+@keyframes moksha_logo_ani {
+  0% {
+    opacity: 0;
+    bottom: 0px;
+  }
+  100% {
+    opacity: 1;
+    bottom: 50%;
   }
 }

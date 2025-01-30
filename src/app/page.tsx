@@ -4,7 +4,6 @@ import React, { useEffect, useState } from 'react';
 import { Inter, Unbounded } from 'next/font/google';
 import Image from 'next/image';
 import Link from 'next/link';
-import { motion } from 'framer-motion'; // Import Framer Motion
 
 const inter = Inter({ subsets: ['latin'] });
 const unbounded = Unbounded({ subsets: ['latin'] });
@@ -17,6 +16,8 @@ const videoLinks = [
 
 const CommingSoon = () => {
   const [videoSrc, setVideoSrc] = useState<string | undefined>(undefined);
+  const [width, setWidth] = useState(0);
+  const [videoMuted, setVideoMuted] = useState(true);
 
   useEffect(() => {
     // Select a random video from the array
@@ -31,6 +32,7 @@ const CommingSoon = () => {
     if (!box || !playBtn) return;
 
     playBtn.style.setProperty('--final-x', `${box.clientWidth}px`);
+    setWidth(box.clientWidth - 20);
 
     requestAnimationFrame(() => {
       playBtn.classList.add('animate');
@@ -40,7 +42,13 @@ const CommingSoon = () => {
   return (
     <div className="relative w-full min-h-screen h-full bg-black">
       {/* Video Background */}
-      <video autoPlay loop className="absolute top-0 left-0 w-full h-full object-cover" src={videoSrc} />
+      <video
+        autoPlay
+        muted={videoMuted}
+        loop
+        className="absolute top-0 left-0 w-full h-full object-cover"
+        src={videoSrc}
+      />
       {/* Tint Overlay */}
       <div className="absolute top-0 left-0 w-full h-full bg-black opacity-60 z-10" />
 
@@ -63,55 +71,16 @@ const CommingSoon = () => {
         </div>
 
         {/* Logo Section */}
-        <div className="w-full px-4 sm:px-6 md:px-8 flex flex-col items-center justify-center flex-1">
-          {/* <Image
-            src={'/mokshalogo.png'}
-            alt="moksha logo"
-            width={1000}
-            height={1000}
-            className="invert w-full max-w-[40rem] sm:max-w-[50rem] md:max-w-[65rem] mx-auto"
-          /> */}
+        <div className="relative w-full px-4 sm:px-6 md:px-8 flex flex-col items-center justify-center flex-1">
           <div
             className={`relative text-container font-serif text-white font-black text-4xl md:text-5xl lg:text-7xl md:-mt-10 uppercase space-x-2 xs:space-x-4 md:space-x-6`}
           >
             <div className="animated_fade_in">WE</div>
             <div className="animated_fade_in">ARE</div>
             <div className="animated_fade_in">BACK</div>
-            <div className="play_btn">
-              <svg width={100} height={100} viewBox="0 0 64 65" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <g id="play">
-                  <circle
-                    id="circle"
-                    cx={32}
-                    cy={32}
-                    r="28.5"
-                    stroke="white"
-                    strokeWidth={3}
-                    strokeMiterlimit="4.81765"
-                    strokeDasharray="6 6"
-                  />
-                  <mask
-                    id="mask0_0_1"
-                    style={{ maskType: 'alpha' }}
-                    maskUnits="userSpaceOnUse"
-                    x={13}
-                    y={14}
-                    width={40}
-                    height={39}
-                  >
-                    <ellipse id="Ellipse 20" cx={33} cy="33.5" rx={20} ry="19.5" fill="#D9D9D9" />
-                  </mask>
-                  <g mask="url(#mask0_0_1)">
-                    <path
-                      id="path3785"
-                      d="M47.9999 32.2817L23.9999 48.4226V16.1408L47.9999 32.2817ZM31.9999 0.00585938C14.3505 0.00585938 0.00585938 14.4769 0.00585938 32.2818C0.00585938 50.0867 14.3505 64.5577 31.9999 64.5577C49.6493 64.5577 63.994 50.0867 63.994 32.2818C63.994 14.4769 49.6493 0.00585938 31.9999 0.00585938ZM31.9999 4.02909C47.4876 4.02909 60.0059 16.6577 60.0059 32.2818C60.0059 47.9058 47.4876 60.5344 31.9999 60.5344C16.5122 60.5344 3.99396 47.9058 3.99396 32.2818C3.99396 16.6577 16.5122 4.02909 31.9999 4.02909Z"
-                      fill="white"
-                    />
-                  </g>
-                </g>
-              </svg>
-            </div>
+            <PlayPauseButton setVideoMuted={setVideoMuted} videoMuted={videoMuted} />
           </div>
+          <img className="moksha_logo" src={'/mokshalogo.png'} alt="moksha logo" width={width} />
         </div>
 
         {/* Footer Section */}
@@ -125,10 +94,24 @@ const CommingSoon = () => {
             </p>
           </div>
           <div className="flex space-x-4 sm:space-x-6 items-center justify-center sm:justify-start px-4 sm:px-0">
-            <Image src={'/gmail.png'} alt="gmail" width={40} height={40} className="w-8 sm:w-10" />
-            <Image src={'/instagram.png'} alt="instagram" width={40} height={40} className="w-8 sm:w-10" />
-            <Image src={'/facebook.png'} alt="facebook" width={40} height={40} className="w-8 sm:w-10" />
-            <Image src={'/x.png'} alt="x " width={40} height={40} className="w-8 sm:w-10" />
+            <Link href="mailto:moksha@nsut.ac.in" target="_blank">
+              <Image src="/gmail.png" alt="Gmail" width={40} height={40} className="w-8 sm:w-10 cursor-pointer" />
+            </Link>
+            <Link href="https://instagram.com/mokshansut" target="_blank">
+              <Image
+                src="/instagram.png"
+                alt="Instagram"
+                width={40}
+                height={40}
+                className="w-8 sm:w-10 cursor-pointer"
+              />
+            </Link>
+            <Link href="https://facebook.com/mokshansut" target="_blank">
+              <Image src="/facebook.png" alt="Facebook" width={40} height={40} className="w-8 sm:w-10 cursor-pointer" />
+            </Link>
+            <Link href="https://x.com/mokshansut" target="_blank">
+              <Image src="/x.png" alt="X (Twitter)" width={40} height={40} className="w-8 sm:w-10 cursor-pointer" />
+            </Link>{' '}
           </div>
         </div>
       </div>
@@ -137,3 +120,45 @@ const CommingSoon = () => {
 };
 
 export default CommingSoon;
+
+const PlayPauseButton = ({
+  videoMuted,
+  setVideoMuted,
+}: {
+  videoMuted: boolean;
+  setVideoMuted: (muted: boolean) => void;
+}) => {
+  return (
+    <div
+      className="play_btn"
+      onClick={() => {
+        setVideoMuted(!videoMuted);
+      }}
+    >
+      <svg width={100} height={100} viewBox="0 0 64 65" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <g id="icon">
+          <circle
+            id="circle"
+            cx={32}
+            cy={32}
+            r="28.5"
+            stroke="white"
+            strokeWidth={3}
+            strokeMiterlimit="4.81765"
+            strokeDasharray="6 6"
+          />
+          {videoMuted ? (
+            <g id="play">
+              <polygon points="25,18 25,46 45,32" fill="white" />
+            </g>
+          ) : (
+            <g id="pause">
+              <rect x={22} y={17} width={6} height={30} rx={3} fill="white" />
+              <rect x={36} y={17} width={6} height={30} rx={3} fill="white" />
+            </g>
+          )}
+        </g>
+      </svg>
+    </div>
+  );
+};
