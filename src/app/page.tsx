@@ -32,6 +32,10 @@ const CommingSoon = () => {
     playBtn.style.setProperty('--initial-x', `${text_container.offsetLeft - text_container.clientWidth / 2 - 100}px`);
     playBtn.style.setProperty('--initial-y', `50%`);
     playBtn.style.setProperty('--final-x', `${text_container.offsetLeft + text_container.clientWidth / 2 + 100}px`);
+    playBtn.style.setProperty(
+      '--settle-y',
+      `calc(${text_container.offsetTop + text_container.clientHeight / 2}px + 3rem)`
+    );
     setWidth(text_container.clientWidth - 20);
     requestAnimationFrame(() => {
       playBtn.classList.add('animate');
@@ -71,7 +75,7 @@ const CommingSoon = () => {
         </div>
 
         {/* Logo Section */}
-        <div className="super_container w-full px-4 sm:px-6 md:px-8 flex flex-col items-center justify-center flex-1">
+        <div className="w-full px-4 sm:px-6 md:px-8 flex flex-col items-center justify-center flex-1">
           <div
             className={`flex gap-4 justify-center items-center text-container font-serif text-white font-black text-4xl md:text-5xl lg:text-7xl uppercase`}
           >
