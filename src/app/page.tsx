@@ -138,7 +138,7 @@ const PlayPauseButton = ({
 }) => {
   return (
     <div
-      className="play_btn"
+      className="play_btn z-50"
       onClick={() => {
         setVideoMuted(!videoMuted);
       }}
