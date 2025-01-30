@@ -1,29 +1,73 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Inter, Unbounded } from 'next/font/google';
 import Image from 'next/image';
 import Link from 'next/link';
+import videojs from 'video.js';
+import 'video.js/dist/video-js.css';
+import Player from 'video.js/dist/types/player';
 
 const inter = Inter({ subsets: ['latin'] });
 const unbounded = Unbounded({ subsets: ['latin'] });
 
 const videoLinks = [
-  'https://moksha2025.b-cdn.net/7b2f0a8c9e3d1b5a4f6c8e2d0b7a9c3f1e4d8b5a2c6f9e3d1b5a4f6c8e2d0b8.mp4',
-  'https://moksha2025.b-cdn.net/e9c7a01e4ac489c13f44573d38fa1265983c8f3fb4c538f289fdc6612c2e9518.mp4',
-  'https://moksha2025.b-cdn.net/f1d8e4b5a2c6f9e3d1b5a4f6c8e2d0b7a9c3f1e4d8b5a2c6f9e3d1b5a4f6c88.mp4',
+  // 'https://moksha2025.b-cdn.net/7b2f0a8c9e3d1b5a4f6c8e2d0b7a9c3f1e4d8b5a2c6f9e3d1b5a4f6c8e2d0b1/output.m3u8',
+  'https://moksha2025.b-cdn.net/e9c7a01e4ac489c13f44573d38fa1265983c8f3fb4c538f289fdc6612c2e9511/output.m3u8',
+  // 'https://moksha2025.b-cdn.net/f1d8e4b5a2c6f9e3d1b5a4f6c8e2d0b7a9c3f1e4d8b5a2c6f9e3d1b5a4f6c8e/output.m3u8',
 ];
 
 const CommingSoon = () => {
-  const [videoSrc, setVideoSrc] = useState<string | undefined>(undefined);
   const [width, setWidth] = useState(0);
   const [videoMuted, setVideoMuted] = useState(true);
+  const videoRef = useRef(null);
+  const playerRef = useRef<Player>(null);
 
   useEffect(() => {
     // Select a random video from the array
     const randomVideo = videoLinks[Math.floor(Math.random() * videoLinks.length)];
-    setVideoSrc(randomVideo);
+
+    if (videoRef.current) {
+      playerRef.current = videojs(videoRef.current, {
+        autoplay: true,
+        controls: false,
+        loop: true,
+        muted: videoMuted,
+        fill: true,
+        responsive: true,
+        controlBar: false,
+        bigPlayButton: false,
+        loadingSpinner: false,
+        textTrackDisplay: false,
+        errorDisplay: false,
+        sources: [
+          {
+            src: randomVideo,
+            type: 'application/x-mpegURL',
+          },
+        ],
+        html5: {
+          hls: {
+            enableLowInitialPlaylist: true,
+            smoothQualityChange: true,
+            overrideNative: true,
+          },
+        },
+      });
+    }
+
+    return () => {
+      if (playerRef.current) {
+        playerRef.current.dispose();
+      }
+    };
   }, []);
+
+  useEffect(() => {
+    if (playerRef.current) {
+      playerRef.current.muted(videoMuted);
+    }
+  }, [videoMuted]);
 
   useEffect(() => {
     const text_container = document.querySelector('.text-container') as HTMLElement;
@@ -45,14 +89,15 @@ const CommingSoon = () => {
   return (
     <div className="w-full min-h-screen h-full bg-black">
       {/* Video Background */}
-      <video
-        preload="metadata"
-        autoPlay
-        muted={videoMuted}
-        loop
-        className="absolute top-0 left-0 w-full h-full object-cover"
-        src={videoSrc}
-      />
+      <div className="absolute overflow-hidden inset-0 w-full h-full">
+        <div data-vjs-player className="w-full h-full">
+          <video
+            ref={videoRef}
+            className="video-js vjs-default-skin vjs-fullscreen vjs-big-play-centered"
+            style={{ position: 'absolute', width: '100%', height: '100%', objectFit: 'cover' }}
+          />
+        </div>
+      </div>
       {/* Tint Overlay */}
       <div className="absolute top-0 left-0 w-full h-full bg-black opacity-60 z-10" />
 
