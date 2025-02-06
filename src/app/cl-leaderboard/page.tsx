@@ -178,7 +178,7 @@ const LeaderBoard = () => {
                       {/* Profile Box */}
                       <div className="absolute -top-10 md:-top-12 left-1/2 transform -translate-x-1/2">
                         <p className="text-white font-bold text-base sm:text-xl md:text-2xl text-center whitespace-nowrap">
-                          {player.name}
+                          {player.name.split(' ')[0]}
                         </p>
                       </div>
                     </div>
