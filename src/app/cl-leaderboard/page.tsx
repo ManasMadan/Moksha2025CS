@@ -135,7 +135,7 @@ const LeaderBoard = () => {
   };
 
   return (
-    <div className="min-h-screen w-full relative">
+    <div className="min-h-[100dvh] w-full relative">
       {showLoading && (
         <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center">
           <div className="bg-[#000545]/90 p-8 rounded-xl shadow-2xl flex flex-col items-center max-w-md mx-4">
