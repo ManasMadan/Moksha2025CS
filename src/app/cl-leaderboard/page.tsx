@@ -197,7 +197,7 @@ const LeaderBoard = () => {
                 placeholder="Search players..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="bg-white text-white pl-10 w-full md:w-[50ch] rounded-full"
+                className="bg-white pl-10 w-full md:w-[50ch] rounded-full"
               />
             </div>
 

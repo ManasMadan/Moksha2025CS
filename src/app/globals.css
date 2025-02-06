@@ -75,9 +75,8 @@ body {
   }
 }
 
-/* Custom Scrollbar */
 ::-webkit-scrollbar {
-  width: 8px; /* Thin scrollbar */
+  width: 8px;
 }
 
 ::-webkit-scrollbar-track {
@@ -150,7 +149,6 @@ body {
   top: var(--initial-y);
   transform: translate(-50%, -50%);
   opacity: 0;
-
   cursor: pointer;
 }
 
@@ -191,13 +189,19 @@ body {
 
 .play_btn #circle {
   opacity: 0;
-  transform-origin: center;
+  transform-origin: center center;
   transform: rotate(0deg);
   animation: rotate 3s linear infinite calc(var(--local_delay) * 3.5),
     circlefadein 3s forwards calc(var(--local_delay) * 3.5);
+
+  will-change: transform, opacity;
+  backface-visibility: hidden;
 }
 
 @keyframes rotate {
+  0% {
+    transform: rotate(0deg);
+  }
   100% {
     transform: rotate(360deg);
   }
