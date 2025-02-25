@@ -110,20 +110,20 @@ const CommingSoon = () => {
           <div className="mb-4 sm:mb-0">
             <Image src={'/mokshaSmall.png'} alt="logoSmall" width={100} height={100} className="w-12 sm:w-16" />
           </div>
-          <div className="flex flex-row items-center space-x-4 pb-4">
-            <Link
+          {/* <div className="flex flex-row items-center space-x-4 pb-4"> */}
+          {/* <Link
               href="/cl-register"
               className="px-4 sm:px-6 py-3 sm:py-4 bg-transparent border border-white rounded-xl text-white italic font-bold cursor-pointer text-sm sm:text-base"
             >
               Registration
-            </Link>
-            <Link
-              href="/cl-leaderboard"
-              className="px-4 sm:px-6 py-3 sm:py-4 bg-transparent border border-white rounded-xl text-white italic font-bold cursor-pointer text-sm sm:text-base"
-            >
-              Leaderboard
-            </Link>
-          </div>
+            </Link> */}
+          <Link
+            href="/cl-leaderboard"
+            className="px-4 sm:px-6 py-3 sm:py-4 bg-transparent border border-white rounded-xl text-white italic font-bold cursor-pointer text-sm sm:text-base"
+          >
+            Leaderboard
+          </Link>
+          {/* </div> */}
         </div>
 
         {/* Logo Section */}
