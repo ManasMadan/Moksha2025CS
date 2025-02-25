@@ -43,7 +43,7 @@ const LeaderBoard = () => {
   const [filterRank, setFilterRank] = useState('all');
   const [data, setData] = useState<IleaderBoardData[]>([]);
   const [showLoading, setShowLoading] = useState(false);
-  const ITEMS_PER_PAGE = 4;
+  const ITEMS_PER_PAGE = 20;
 
   useEffect(() => {
     const fetchData = async () => {
@@ -266,18 +266,127 @@ const LeaderBoard = () => {
               <ChevronLeft className="w-6 h-6 sm:w-8 sm:h-8" />
             </Button>
 
-            {Array.from({ length: pageCount }, (_, i) => i + 1).map((page) => (
-              <Button
-                key={page}
-                variant={currentPage === page ? 'default' : 'ghost'}
-                className={`w-8 h-8 sm:w-12 sm:h-12 p-0 rounded-full text-base sm:text-xl ${
-                  currentPage === page ? 'bg-[#0C1A42]' : 'text-white'
-                }`}
-                onClick={() => setCurrentPage(page)}
-              >
-                {page}
-              </Button>
-            ))}
+            {(() => {
+              const pages = [];
+
+              // Always add page 1
+              pages.push(
+                <Button
+                  key={1}
+                  variant={currentPage === 1 ? 'default' : 'ghost'}
+                  className={`w-8 h-8 sm:w-12 sm:h-12 p-0 rounded-full text-base sm:text-xl ${
+                    currentPage === 1 ? 'bg-[#0C1A42]' : 'text-white'
+                  }`}
+                  onClick={() => setCurrentPage(1)}
+                >
+                  1
+                </Button>
+              );
+
+              // Case 1: Current page is 3 or less - show pages 1, 2, 3 and last page
+              if (currentPage <= 3) {
+                // Show pages 2 and 3 in order (if they exist)
+                for (let i = 2; i <= Math.min(3, pageCount); i++) {
+                  pages.push(
+                    <Button
+                      key={i}
+                      variant={currentPage === i ? 'default' : 'ghost'}
+                      className={`w-8 h-8 sm:w-12 sm:h-12 p-0 rounded-full text-base sm:text-xl ${
+                        currentPage === i ? 'bg-[#0C1A42]' : 'text-white'
+                      }`}
+                      onClick={() => setCurrentPage(i)}
+                    >
+                      {i}
+                    </Button>
+                  );
+                }
+
+                // Add ellipsis if we have more than 3 pages total
+                if (pageCount > 3) {
+                  pages.push(
+                    <span key="ellipsis" className="text-white mx-1">
+                      ...
+                    </span>
+                  );
+                }
+              }
+              // Case 2: Current page is close to the end (page ≥ pageCount-2)
+              else if (currentPage >= pageCount - 2) {
+                // Add ellipsis after page 1
+                pages.push(
+                  <span key="ellipsis" className="text-white mx-1">
+                    ...
+                  </span>
+                );
+
+                // Show the last three pages (or fewer if there aren't enough pages)
+                for (let i = Math.max(2, pageCount - 2); i < pageCount; i++) {
+                  pages.push(
+                    <Button
+                      key={i}
+                      variant={currentPage === i ? 'default' : 'ghost'}
+                      className={`w-8 h-8 sm:w-12 sm:h-12 p-0 rounded-full text-base sm:text-xl ${
+                        currentPage === i ? 'bg-[#0C1A42]' : 'text-white'
+                      }`}
+                      onClick={() => setCurrentPage(i)}
+                    >
+                      {i}
+                    </Button>
+                  );
+                }
+              }
+              // Case 3: Current page is in the middle
+              else {
+                // Add ellipsis after page 1
+                pages.push(
+                  <span key="ellipsis1" className="text-white mx-1">
+                    ...
+                  </span>
+                );
+
+                // Show current page with one page before and after
+                for (let i = currentPage - 1; i <= currentPage + 1; i++) {
+                  pages.push(
+                    <Button
+                      key={i}
+                      variant={currentPage === i ? 'default' : 'ghost'}
+                      className={`w-8 h-8 sm:w-12 sm:h-12 p-0 rounded-full text-base sm:text-xl ${
+                        currentPage === i ? 'bg-[#0C1A42]' : 'text-white'
+                      }`}
+                      onClick={() => setCurrentPage(i)}
+                    >
+                      {i}
+                    </Button>
+                  );
+                }
+
+                // Add ellipsis before last page
+                pages.push(
+                  <span key="ellipsis2" className="text-white mx-1">
+                    ...
+                  </span>
+                );
+              }
+
+              // Add last page only if it's not already included and we have more than 3 pages
+              // @ts-ignore
+              if (pageCount > 3 && !pages.some((button) => button.key === pageCount)) {
+                pages.push(
+                  <Button
+                    key={pageCount}
+                    variant={currentPage === pageCount ? 'default' : 'ghost'}
+                    className={`w-8 h-8 sm:w-12 sm:h-12 p-0 rounded-full text-base sm:text-xl ${
+                      currentPage === pageCount ? 'bg-[#0C1A42]' : 'text-white'
+                    }`}
+                    onClick={() => setCurrentPage(pageCount)}
+                  >
+                    {pageCount}
+                  </Button>
+                );
+              }
+
+              return pages;
+            })()}
 
             <Button
               variant="ghost"
