@@ -369,8 +369,7 @@ const LeaderBoard = () => {
               }
 
               // Add last page only if it's not already included and we have more than 3 pages
-              // @ts-expect-error
-              if (pageCount > 3 && !pages.some((button) => button.key === pageCount)) {
+              if (pageCount > 3 && !pages.some((button) => button.key! === pageCount.toString())) {
                 pages.push(
                   <Button
                     key={pageCount}
